@@ -1,0 +1,43 @@
+import time
+import minimalmodbus
+import serial
+import pigpio
+import datetime
+import paramiko
+try :
+    client = paramiko.SSHClient()
+    client.load_system_hostkeys()
+    client.set_missing_host_keys_policy(paramiko.Warningpolicy())
+    client.connect("192.168.1.7", 22 ,"tester","password")
+    dirname="rs485"
+    sftp=client.open_sftp()
+    sftp.mkdir(dirname)
+except IOError:
+    print('connection_with_server_failed_!!!')
+pass
+slave_id_of_meters=[101]
+instrument=[]
+files=[]
+i=0
+for X in range(0,len( slave_id_of_meters )):
+    instrument.append(minimalmodbus.instrument('/dev/tty/USB0',slave_id_of_the_meters[ x ]))
+    instrument[x].serial.baudrate=9600
+    instrument[x].serial.bytesize=8
+    instrument[x].serial.parity=serial.PARITY_EVEN
+    instrument[x].serial.stopbits=1
+    instrument[x].serial.timeout=1
+    instrument[x].mode=minimalmodbus.MODE_RTU
+    files.append(sftp.open(dirname + 'rs485' + str(slave_id_of_meters[x]+'test','a')))
+while 1:
+    try:
+        i+=1
+        for x in range(0,len(slave_id_of_meters)):
+            before_read = datetime.datetime.now()
+            test_reg =instrument[x].read_registers(0,2,4)
+            after_read = datetime.datetime.now()
+            files[x].write(str(time_now)[:23]+str( test_reg )+'\n')
+       
+    except:
+        print("exception_occured_after_"+str(i)+"_lines_hence_restarting")
+    i=0
+    time.sleep(1)
