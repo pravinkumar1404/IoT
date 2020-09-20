@@ -10,6 +10,7 @@ try:
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     client.connect(hostname='192.168.2.160', port=22, username='root', password='Password@1976')
     sftp=client.open_sftp()
+    sftp.mkdir('data/tester/upload')
     print(sftp.getcwd())
     sftp.get('/data/tester/upload/Py.ipynb','Py_new.ipynb')
     sftp.close()
