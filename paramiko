@@ -17,4 +17,3 @@ try:
 except IOError:
     print('connection_with_server_failed_!!!')
 #Deleted Tester hello how are you? New Changes
-![image]
